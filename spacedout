@@ -1,0 +1,38 @@
+#!/bin/bash
+
+###########################################################################
+# Driver script to replace spaces with the proper escape sequence
+#
+# This BASH script forwards the positional argument to the Python script
+# which does the work and prints the export staement which is evaluated
+# by this script
+#
+# Run as '. spacedout VAR' or 'source spacedout VAR'
+###########################################################################
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+
+show_help() {
+    echo "Usage: spacedout ENV_VAR_TO_CHAGE"
+    echo ""
+    echo "Options:"
+    echo "         -h Show this message and exit"
+    echo "Alter paths with spaces (potentially due to WSL) with the appropriate escape sequence"
+
+    exit 1
+}
+
+if [[ $# -ne 1 ]];
+then
+    echo "Error: Only got $# arguments but expected 1 positional"
+    echo ""
+    show_help
+fi
+
+if [[ "$1" == "-h" ]];
+then
+    show_help
+fi
+
+eval $(python ${SCRIPT_DIR}/spacedout.py $1)
